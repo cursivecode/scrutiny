@@ -81,17 +81,35 @@
             (not (f (m k)))
             (str k " failed exclusion function"))))
 
-;(present-helper test-map :gen)
-;(multiple-keys test-map present-helper [:passwo])
+(defn match
+  ""
+  [m regex k]
+  (if (m :scrutiny)
+    m
+    (result m
+            (re-find regex (str (m k)))
+            (str k " failed match function"))))
 
-;(reduce present-helper test-map [:passwor :gender :gen])
+(defn custom-helper
+  ""
+  [msg f m k]
+  (if (m :scrutiny)
+    m
+    (result m
+            (f (m k))
+            msg)))
 
+(defn custom
+  [m f msg & kys]
+  (reduce (partial custom-helper msg f) m kys))
 
 
 (-> test-map
     (present :password :gender :confirmation)
     (confirmation :password :confirmation)
     (inclusion #(some #{%} (range 0 46)) :age)
-    ;(required :middle-name)
-    (length #(> (count %) 5) :name)
+    (match #"[a-zA-Z]" :password)
+    (length #(> (count %) 2) :username)
+    (required :password :confirmation)
+    (custom #(number? %) "Age must be a number" :age)
     )
