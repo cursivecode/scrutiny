@@ -66,8 +66,8 @@
 (defn- exclusion-helper
   "Checks to see if key returns a truthy value from function"
   [f m k]
-  (scrutinize #(hash-map :msg (str k " failed exclusion function")
-                         :pred (not (f (k m))))))
+  (scrutinize m #(hash-map :msg (str k " failed exclusion function")
+                           :pred (not (f (k m))))))
 
 (defn exclusion [m f & kys]
   (reduce (partial exclusion-helper f) m kys))
