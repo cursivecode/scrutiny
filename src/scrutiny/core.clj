@@ -17,7 +17,8 @@
     (conj m {:scrutiny msg})))
 
 (defn scrutinize
-  ""
+  "Check to see if map has scrutiny, if so returns map.
+   Otherwise, the function call result with map, msg, and pred."
   [m f]
   (if (:scrutiny m)
     m
@@ -25,10 +26,10 @@
       (result m msg pred))))
 
 (defn present-helper
-  ""
+  "Checks to see if k is not in map.  Uses a custom false key."
   [m k]
   (scrutinize m #(hash-map :msg (str k " is not present")
-                           :pred (not= :scrfalse (get m k :scrfalse)))))
+                           :pred (not= :scr-false (get m k :scr-false)))))
 
 (defn present [m & kys]
   (reduce present-helper m kys))
