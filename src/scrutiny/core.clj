@@ -16,7 +16,7 @@
     (let [{:keys [msg pred]} (f)]
       (result m msg pred))))
 
-(defn present-helper
+(defn- present-helper
   "Checks to see if k is not in map.  Uses a custom false key."
   [m k]
   (scrutinize m #(hash-map :msg (str k " is not present")
@@ -25,7 +25,7 @@
 (defn present [m & kys]
   (reduce present-helper m kys))
 
-(defn required-helper
+(defn- required-helper
   "Checks if k is empty or nil"
   [m k]
   (scrutinize m #(hash-map :msg (str k " was empty or nil")
@@ -35,7 +35,7 @@
 (defn required [m & kys]
   (reduce required-helper m kys))
 
-(defn confirmation-helper
+(defn- confirmation-helper
   "Check to see if key equals another key"
   [m [k k2]]
   (scrutinize m #(hash-map :msg (str k " and " k2 " do not match")
@@ -45,7 +45,7 @@
   {:pre [(even? (count kys))]}
   (reduce confirmation-helper m (partition 2 kys)))
 
-(defn length-helper
+(defn- length-helper
   "Checks result of applying f to value."
   [f m k]
   (scrutinize m #(hash-map :msg (str k " failed length function")
@@ -54,7 +54,7 @@
 (defn length [m f & kys]
   (reduce (partial length-helper f) m kys))
 
-(defn inclusion-helper
+(defn- inclusion-helper
   "Checks to see if key returns a truthy value from function"
   [f m k]
   (scrutinize m #(hash-map :msg (str k " failed inclusion function")
@@ -63,7 +63,7 @@
 (defn inclusion [m f & kys]
   (reduce (partial inclusion-helper f) m kys))
 
-(defn exclusion-helper
+(defn- exclusion-helper
   "Checks to see if key returns a truthy value from function"
   [f m k]
   (scrutinize #(hash-map :msg (str k " failed exclusion function")
@@ -72,7 +72,7 @@
 (defn exclusion [m f & kys]
   (reduce (partial exclusion-helper f) m kys))
 
-(defn match-helper
+(defn- match-helper
   "Checks to see if regex expression finds anything."
   [regex m k]
   (scrutinize m #(hash-map :msg (str k " failed match function")
@@ -81,7 +81,7 @@
 (defn match [m regex & kys]
   (reduce (partial match-helper regex) m kys))
 
-(defn custom-helper
+(defn- custom-helper
   "Checks to see if function returns a truthy value.
    Also applies custom function message."
   [msg f m k]
