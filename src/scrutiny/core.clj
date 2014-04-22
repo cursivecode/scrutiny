@@ -26,7 +26,7 @@
   (reduce present-helper m kys))
 
 (defn- required-helper
-  "Checks if k is empty or nil"
+  "Checks if k is empty or nil - meant for strings"
   [m k]
   (scrutinize m #(hash-map :msg (str k " was empty or nil")
                            :pred (not (or (empty? (k m))
