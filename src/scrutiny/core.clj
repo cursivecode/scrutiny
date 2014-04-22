@@ -1,14 +1,5 @@
 (ns scrutiny.core)
 
-(def test-map
-  {:username "Joe"
-   :password "abcdef"
-   :confirmation "abcdef"
-   :gender "male"
-   :middle-name ""
-   :age 45
-   :nickname "joe dirt"})
-
 (defn result
   "Returns the map or map with scrutiny message based on result."
   [m msg validation]
@@ -100,15 +91,3 @@
 (defn custom
   [m f msg & kys]
   (reduce (partial custom-helper msg f) m kys))
-
-
-(-> test-map
-    (present :password :gender :confirmation)
-    (confirmation :password :confirmation :username :username)
-    (inclusion #(some #{%} (range 18 46)) :age)
-    (match #"[a-zA-Z]" :password)
-    (length #(and (< (count %) 15)
-                  (> (count %) 2)) :username :password)
-    (required :password :confirmation)
-    (custom #(number? %) "Age must be a number" :age)
-    )
