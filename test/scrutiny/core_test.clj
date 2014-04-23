@@ -101,6 +101,11 @@
             :nada "nada must be present"}
            (:scrutiny (-> test-map
                           (match #"\d+" :password)
-                          (present :nada :username)))))))
+                          (present :nada :username)))))
+    (is (= test-map
+           (dissoc (-> test-map
+                       (match #"\d+" :password)
+                       (present :nada :username))
+                   :scrutiny)))))
 
 
